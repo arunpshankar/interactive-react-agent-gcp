@@ -6,6 +6,18 @@ __pycache__/
 # C extensions
 *.so
 
+# venv 
+.interactive-react-agent-gcp
+.interactive-react-agent-gcp/
+
+# credentials 
+credentials
+credentials/
+
+# DS Store 
+.DS_Store
+.DS_Store/
+
 # Distribution / packaging
 .Python
 build/
