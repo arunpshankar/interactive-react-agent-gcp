@@ -14,6 +14,12 @@ __pycache__/
 credentials
 credentials/
 
+# chainlit 
+.files
+.files/
+.chainlit
+.chainlit/
+
 # DS Store 
 .DS_Store
 .DS_Store/
