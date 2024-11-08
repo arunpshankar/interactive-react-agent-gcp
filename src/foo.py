@@ -1,6 +1,7 @@
 import chainlit as cl
 import requests
 
+
 # Set the URL of your deployed agent service
 AGENT_API_URL = 'https://react-agent-service-xxxxxxxxxx-uc.a.run.app/api/agent'
 
