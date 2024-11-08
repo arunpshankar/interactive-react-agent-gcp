@@ -24,19 +24,12 @@ def apply_custom_styles():
             background-color: #f0f2f6;
         }
 
-        /* Style the chat container */
-        .chat-container {
-            max-width: 800px;
-            margin: auto;
-            padding: 20px;
-        }
-
         /* Style for user messages */
         .user-message {
             background-color: #cfe9ba;
             border-radius: 15px;
             padding: 10px;
-            margin: 5px 0;
+            margin: 10px 0;
             max-width: 70%;
             align-self: flex-end;
             color: black;
@@ -49,7 +42,7 @@ def apply_custom_styles():
             background-color: #e5e5ea;
             border-radius: 15px;
             padding: 10px;
-            margin: 5px 0;
+            margin: 10px 0;
             max-width: 70%;
             align-self: flex-start;
             color: black;
@@ -93,6 +86,24 @@ def apply_custom_styles():
         html, body, [class*="css"]  {
             font-family: 'Open Sans', sans-serif;
         }
+
+        /* Style for conversation history in sidebar */
+        .history-entry {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #fff;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+        .history-entry h4 {
+            margin: 0 0 5px 0;
+            font-size: 13px;
+        }
+        .history-entry p {
+            margin: 0;
+            color: #333;
+        }
         </style>
     """, unsafe_allow_html=True)
 
@@ -101,6 +112,9 @@ apply_custom_styles()
 # Initialize conversation history in session state
 if 'conversation_history' not in st.session_state:
     st.session_state.conversation_history = []
+    st.session_state.latest_user_message = None
+    st.session_state.latest_agent_response = None
+    st.session_state.latest_trace = None
 
 # Function to send query to the agent API and retrieve the response
 def get_agent_response(user_message):
@@ -123,36 +137,6 @@ def get_agent_response(user_message):
 
     return data
 
-# Sidebar for conversation history and clear option
-with st.sidebar:
-    st.header("Conversation History")
-    if st.session_state.conversation_history:
-        for i, message in enumerate(st.session_state.conversation_history):
-            if message['role'] == 'user':
-                st.markdown(f"**You:** {message['content']}")
-            elif message['role'] == 'assistant':
-                st.markdown(f"**Agent:** {message['content']}")
-    else:
-        st.write("No conversation history yet.")
-
-    # Add a button to clear the conversation history
-    if st.button("Clear Conversation"):
-        st.session_state.conversation_history = []
-        st.experimental_rerun()
-
-# Main content area
-st.markdown("<h1 style='text-align: center;'>💬 Professional Chat Interface with Agent</h1>", unsafe_allow_html=True)
-st.write("Welcome! Type your query below and interact with the agent.")
-
-# Container for the chat messages
-with st.container():
-    # Display the conversation history in the main area
-    for message in st.session_state.conversation_history:
-        if message['role'] == 'user':
-            st.markdown(f"<div class='user-message'>{message['content']}</div>", unsafe_allow_html=True)
-        elif message['role'] == 'assistant':
-            st.markdown(f"<div class='agent-message'>{message['content']}</div>", unsafe_allow_html=True)
-
 # Function to display the agent's thought process
 def display_trace(trace):
     if trace:
@@ -164,9 +148,51 @@ def display_trace(trace):
             else:
                 content = str(msg)
             st.markdown(f"<div class='trace-step'><strong>Step {idx}:</strong> {content}</div>", unsafe_allow_html=True)
+
+# Sidebar for conversation history and clear option
+with st.sidebar:
+    st.header("Conversation History")
+    if st.session_state.conversation_history:
+        # Group messages into exchanges
+        exchanges = []
+        exchange = {}
+        for message in st.session_state.conversation_history:
+            if message['role'] == 'user':
+                if 'user' in exchange:
+                    exchanges.append(exchange)
+                    exchange = {}
+                exchange['user'] = message['content']
+            elif message['role'] == 'assistant':
+                exchange['assistant'] = message['content']
+                exchanges.append(exchange)
+                exchange = {}
+        # If there's an incomplete exchange, add it
+        if exchange:
+            exchanges.append(exchange)
+
+        # Display exchanges with improved styling
+        for idx, ex in enumerate(exchanges):
+            st.markdown(f"""
+            <div class='history-entry'>
+                <h4>Exchange {idx + 1}</h4>
+                <p><strong>You:</strong> {ex.get('user', '')}</p>
+                <p><strong>Agent:</strong> {ex.get('assistant', '')}</p>
+            </div>
+            """, unsafe_allow_html=True)
     else:
-        st.markdown("<h3>Agent's Thought Process</h3>", unsafe_allow_html=True)
-        st.info("No additional details available.")
+        st.write("No conversation history yet.")
+
+    # Add a button to clear the conversation history
+    if st.button("Clear Conversation"):
+        st.session_state.conversation_history = []
+        st.session_state.latest_user_message = None
+        st.session_state.latest_agent_response = None
+        st.session_state.latest_trace = None
+        st.experimental_rerun()
+
+# Main content area
+st.markdown("<h1 style='text-align: center;'>💬 Professional Chat Interface with Agent</h1>", unsafe_allow_html=True)
+st.write("Welcome! Type your query below and interact with the agent.")
 
 # Get user input using st.form with clear_on_submit=True
 with st.form(key='user_input_form', clear_on_submit=True):
@@ -177,7 +203,7 @@ with st.form(key='user_input_form', clear_on_submit=True):
 if submit_button and user_message:
     # Add user message to the conversation history
     st.session_state.conversation_history.append({'role': 'user', 'content': user_message})
-
+    
     # Display the user's message
     st.markdown(f"<div class='user-message'>{user_message}</div>", unsafe_allow_html=True)
 
@@ -190,13 +216,11 @@ if submit_button and user_message:
         # Add agent's response to the conversation history
         st.session_state.conversation_history.append({'role': 'assistant', 'content': final_answer})
 
-        # Display agent's response
+        # Display agent's response and thought process
         st.markdown(f"<div class='agent-message'>{final_answer}</div>", unsafe_allow_html=True)
-
-        # Display the agent's thought process
         display_trace(trace)
     else:
-        # Add error message to conversation history
+        # Handle error case
         error_message = 'Failed to get response from agent.'
         st.session_state.conversation_history.append({'role': 'assistant', 'content': error_message})
         st.markdown(f"<div class='agent-message'>{error_message}</div>", unsafe_allow_html=True)
