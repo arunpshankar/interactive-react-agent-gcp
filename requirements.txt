@@ -65,6 +65,7 @@ python-dotenv==1.0.1
 python-engineio==4.10.1
 python-multipart==0.0.9
 python-socketio==5.11.4
+PyYAML==6.0.2
 requests==2.32.3
 rsa==4.9
 shapely==2.0.6
