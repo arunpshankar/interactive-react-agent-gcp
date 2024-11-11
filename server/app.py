@@ -1,11 +1,15 @@
-import json
 from vertexai.generative_models import GenerativeModel
-from src.react.agent import Agent, Name 
 from src.tools.serp import search as google_search
 from src.tools.wiki import search as wiki_search
 from src.config.logging import logger
 from src.config.setup import config
-from flask import jsonify, request, Flask
+from src.react.agent import Agent
+from src.react.agent import Name 
+from flask import jsonify
+from flask import request
+from flask import Flask
+import json
+
 
 app = Flask(__name__)
 
@@ -13,7 +17,9 @@ app = Flask(__name__)
 gemini = GenerativeModel(config.MODEL_NAME)
 
 def parse_thought_content(content):
-    """Extract JSON-like part from content surrounded by ```json``` and convert it to a dictionary."""
+    """
+    Extract JSON-like part from content surrounded by ```json``` and convert it to a dictionary.
+    """
     try:
         # Check if content includes ```json``` markers
         if "```json" in content:
@@ -29,6 +35,7 @@ def parse_thought_content(content):
     except (IndexError, json.JSONDecodeError) as e:
         logger.error(f"Error parsing thought content: {e}")
         return content  # Return the original content if parsing fails
+
 
 @app.route('/api/agent', methods=['POST'])
 def agent_api():
@@ -59,6 +66,7 @@ def agent_api():
         'trace': trace
     }
     return jsonify(response), 200
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080)

@@ -1,6 +1,7 @@
-from vertexai.generative_models import GenerativeModel, Part 
+from vertexai.generative_models import GenerativeModel
 from src.tools.serp import search as google_search
 from src.tools.wiki import search as wiki_search
+from vertexai.generative_models import Part 
 from src.config.logging import logger
 from src.config.setup import config
 from src.llm.gemini import generate
@@ -8,8 +9,11 @@ from src.utils.io import read_file
 from pydantic import BaseModel
 from typing import Callable
 from pydantic import Field 
-from typing import Union, List, Dict
-from enum import Enum, auto
+from typing import Union
+from typing import List 
+from typing import Dict 
+from enum import Enum
+from enum import auto 
 import json
 import os
 
