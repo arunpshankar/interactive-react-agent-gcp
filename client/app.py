@@ -117,7 +117,7 @@ def get_agent_response(user_message):
     payload = {'query': user_message, 'conversation': st.session_state.conversation_history}
 
     try:
-        response = requests.post(AGENT_API_URL, json=payload, timeout=30)
+        response = requests.post(AGENT_API_URL, json=payload, timeout=60)
         response.raise_for_status()
         data = response.json()
         logging.info("Received response from agent service.")

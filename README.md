@@ -98,3 +98,18 @@ Ensure you have the following installed:
 ## Deployment on Google Cloud 🌐
 
 To deploy the ReAct agent to Google Cloud Run, follow the instructions in `./server/README.md`, which cover Dockerizing the service and setting up the deployment on Google Cloud.
+
+---
+
+## Example Queries and Expected Answers to Try 🎉
+
+Try these example queries to see the ReAct agent in action:
+
+1. **Query**: "Which tennis players won 3+ Grand Slams in the 1990s, and which American fast-food chain did they all appear in commercials for?"
+   
+   **Expected Answer**: Sampras, Agassi, Graf — Pizza Hut.
+
+2. **Query**: "Which baseball teams won back-to-back World Series in the 1990s, and what signature hot beverage did both cities claim to have invented?"
+
+   **Expected Answer**: Toronto Blue Jays, Yankees — Irish Coffee (both cities had famous Irish pubs claiming to be the first).
+
