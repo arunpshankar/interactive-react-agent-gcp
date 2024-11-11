@@ -1,8 +1,6 @@
-from vertexai.generative_models import GenerativeModel 
+from vertexai.generative_models import GenerativeModel, Part 
 from src.tools.serp import search as google_search
 from src.tools.wiki import search as wiki_search
-from vertexai.generative_models import Part 
-from src.utils.io import write_to_file
 from src.config.logging import logger
 from src.config.setup import config
 from src.llm.gemini import generate
@@ -10,18 +8,18 @@ from src.utils.io import read_file
 from pydantic import BaseModel
 from typing import Callable
 from pydantic import Field 
-from typing import Union
-from typing import List 
-from typing import Dict 
-from enum import Enum
-from enum import auto
+from typing import Union, List, Dict
+from enum import Enum, auto
 import json
+import os
 
 
 Observation = Union[str, Exception]
 
-PROMPT_TEMPLATE_PATH = "./data/input/react.txt"
-OUTPUT_TRACE_PATH = "./data/output/trace.txt"
+PROMPT_TEMPLATE_PATHS = [
+    "./template/react.txt",
+    "./server/template/react.txt"
+]
 
 class Name(Enum):
     """
@@ -113,8 +111,17 @@ class Agent:
 
         Returns:
             str: The content of the prompt template file.
+
+        Raises:
+            FileNotFoundError: If the prompt template file cannot be found in any of the specified paths.
         """
-        return read_file(PROMPT_TEMPLATE_PATH)
+        for path in PROMPT_TEMPLATE_PATHS:
+            if os.path.exists(path):
+                logger.info(f"Loading prompt template from: {path}")
+                return read_file(path)
+        
+        logger.error("Prompt template file not found in any default locations.")
+        raise FileNotFoundError("Prompt template file not found in expected locations.")
 
     def register(self, name: Name, func: Callable[[str], str]) -> None:
         """
@@ -128,7 +135,7 @@ class Agent:
 
     def trace(self, role: str, content: str) -> None:
         """
-        Logs the message with the specified role and content and writes to file.
+        Logs the message with the specified role and content.
 
         Args:
             role (str): The role of the message sender.
@@ -136,7 +143,6 @@ class Agent:
         """
         if role != "system":
             self.messages.append(Message(role=role, content=content))
-        write_to_file(path=OUTPUT_TRACE_PATH, content=f"{role}: {content}\n")
 
     def get_history(self) -> str:
         """
@@ -153,7 +159,6 @@ class Agent:
         """
         self.current_iteration += 1
         logger.info(f"Starting iteration {self.current_iteration}")
-        write_to_file(path=OUTPUT_TRACE_PATH, content=f"\n{'='*50}\nIteration {self.current_iteration}\n{'='*50}\n")
 
         if self.current_iteration > self.max_iterations:
             logger.warning("Reached maximum iterations. Stopping.")
@@ -280,4 +285,3 @@ if __name__ == "__main__":
     query = "What is the age of the oldest tree in the country that has won the most FIFA World Cup titles?"
     final_answer = run(query)
     logger.info(final_answer)
-    
