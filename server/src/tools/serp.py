@@ -1,16 +1,9 @@
 from src.config.logging import logger
 from src.utils.io import load_yaml
-from typing import Tuple
-from typing import Union
-from typing import Dict
-from typing import List
-from typing import Any 
+from typing import Tuple, Union, Dict, List, Any
 import requests
 import json
-
-
-# Static paths
-CREDENTIALS_PATH = './credentials/key.yml'
+import os
 
 class SerpAPIClient:
     """
@@ -63,15 +56,9 @@ class SerpAPIClient:
             logger.error(f"Request to SERP API failed: {e}")
             return response.status_code, str(e)
 
-
-def load_api_key(credentials_path: str) -> str:
+def load_api_key() -> str:
     """
-    Load the API key from the specified YAML file.
-
-    Parameters:
-    -----------
-    credentials_path : str
-        The path to the YAML file containing the API credentials.
+    Load the API key from the credentials file. Dynamically checks possible locations.
 
     Returns:
     --------
@@ -82,10 +69,20 @@ def load_api_key(credentials_path: str) -> str:
     -------
     KeyError
         If the 'serp' or 'key' keys are missing in the YAML file.
+    FileNotFoundError
+        If the credentials file is not found.
     """
-    config = load_yaml(credentials_path)
-    return config['serp']['key']
-
+    possible_paths = [
+        os.path.abspath('./credentials/key.yml'),
+        os.path.abspath('./server/credentials/key.yml'),
+    ]
+    for path in possible_paths:
+        if os.path.exists(path):
+            logger.info(f"Loading API key from credentials file at: {path}")
+            config = load_yaml(path)
+            return config['serp']['key']
+    logger.error("API credentials file not found in any default locations.")
+    raise FileNotFoundError("Credentials file not found in expected locations.")
 
 def format_top_search_results(results: Dict[str, Any], top_n: int = 10) -> List[Dict[str, Any]]:
     """
@@ -113,7 +110,6 @@ def format_top_search_results(results: Dict[str, Any], top_n: int = 10) -> List[
         for result in results.get('organic_results', [])[:top_n]
     ]
 
-
 def search(search_query: str, location: str = "") -> str:
     """
     Main function to execute the Google search using SERP API and return the top results as a JSON string.
@@ -131,7 +127,7 @@ def search(search_query: str, location: str = "") -> str:
         A JSON string containing the top search results or an error message, with updated key names.
     """
     # Load the API key
-    api_key = load_api_key(CREDENTIALS_PATH)
+    api_key = load_api_key()
 
     # Initialize the SERP API client
     serp_client = SerpAPIClient(api_key)
@@ -150,7 +146,6 @@ def search(search_query: str, location: str = "") -> str:
         error_json = json.dumps({"error": f"Search failed with status code {status_code}: {error_message}"})
         logger.error(error_json)
         return error_json
-
 
 if __name__ == "__main__":
     search_query = "Best gyros in Barcelona, Spain"
