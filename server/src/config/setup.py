@@ -15,7 +15,7 @@ class Config:
             cls._instance.__initialized = False
         return cls._instance
     
-    def __init__(self, config_path: str = "./config/config.yml"):
+    def __init__(self, config_path: str = "./config.yml"):
         """
         Initialize the Config class.
 
