@@ -6,7 +6,7 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 # Define the API URL of your agent service
-AGENT_API_URL = 'http://localhost:8080/api/agent'
+AGENT_API_URL = 'https://react-agent-service-390991481152.us-central1.run.app/api/agent'
 
 # Streamlit UI setup
 st.set_page_config(page_title="Agent Chat Interface", page_icon="💬", layout="wide")
