@@ -1,16 +1,12 @@
-# Deploying a React Agent Service on Google Cloud Run
+# Deploying a ReAct Agent Service on Google Cloud Run
 
-This guide provides a comprehensive process to build and deploy a Python-based React Agent service using Docker on Google Cloud Run. The Docker image is created from a `requirements.txt` file, pushed to Google Artifact Registry, and deployed to Cloud Run.
-
----
+This guide outlines the steps to build and deploy a Python-based ReAct Agent service using Docker on Google Cloud Run. The process involves creating a Docker image from a `requirements.txt` file, pushing it to Google Artifact Registry, and deploying it to Cloud Run.
 
 ## Prerequisites
 
-- **Docker**: Ensure Docker is installed and running. Alternatively, use **Vertex AI Workbench**, which includes Docker and `gcloud`.
+- **Docker**: Make sure Docker is installed and running, or use **Vertex AI Workbench**, which includes Docker and `gcloud`.
 - **Google Cloud SDK**: Install the Google Cloud SDK, including the `gcloud` CLI.
-- **Google Cloud Project**: Set up a Google Cloud project with billing enabled.
-
----
+- **Google Cloud Project**: Ensure you have a Google Cloud project with billing enabled.
 
 ## Deployment Steps
 
@@ -22,7 +18,7 @@ Export your Google Cloud Project ID as an environment variable:
 export PROJECT_ID=your-google-cloud-project-id
 ```
 
-Verify the export:
+Verify:
 
 ```bash
 echo $PROJECT_ID
@@ -55,13 +51,13 @@ gcloud services enable artifactregistry.googleapis.com
 
 ### 5. Create a Credentials Folder and Add Keys
 
-Inside your project directory, create a `credentials` folder to store service account and API keys:
+In your project directory, create a `credentials` folder to store service account and API keys:
 
 ```bash
 mkdir -p ./server/credentials
 ```
 
-Place your service account credentials (e.g., `key.json`) and SERP API credentials (e.g., `key.yml`) inside the `./server/credentials` folder. Be sure to add these files to your `.gitignore` to keep them secure:
+Place your service account credentials (e.g., `key.json`) and SERP API credentials (e.g., `key.yml`) inside the `./server/credentials` folder. To keep them secure, add these files to `.gitignore`:
 
 ```plaintext
 # Add to .gitignore
@@ -121,7 +117,7 @@ gcloud run deploy react-agent-service \
   --port 8080
 ```
 
-After deployment, you should see a message like:
+After deployment, you’ll see a message similar to:
 
 ```
 Service [react-agent-service] revision [react-agent-service-00010-hns] has been deployed and is serving 100 percent of traffic.
@@ -130,15 +126,13 @@ Service URL: https://react-agent-service-xxxxxxxxxx.us-central1.run.app
 
 Use this Service URL to interact with the deployed agent from your client application.
 
----
-
 ## Troubleshooting
 
 - **Image Not Found**: Ensure the image exists in Artifact Registry and re-run `docker push` if needed.
 - **Authentication Errors**: Re-authenticate with `gcloud auth configure-docker us-central1-docker.pkg.dev` and verify permissions.
 - **Port Configuration**: Confirm the `PORT` in Cloud Run matches the `EXPOSE` command in the Dockerfile (e.g., 8080 in this example).
 
-> **Tip**: Use Cloud Run logs to view detailed error messages and troubleshoot issues.
+> **Tip**: Use Cloud Run logs for detailed error messages and troubleshooting.
 
 To list all images:
 
@@ -146,18 +140,14 @@ To list all images:
 docker images
 ```
 
-To delete any previous images:
+To delete previous images:
 
 ```bash
 docker rmi -f <image-id>
 ```
-
----
 
 ## Additional Resources
 
 - [Google Cloud SDK Documentation](https://cloud.google.com/sdk/docs)
 - [Artifact Registry Guide](https://cloud.google.com/artifact-registry)
 - [Cloud Run Documentation](https://cloud.google.com/run/docs)
-
----
