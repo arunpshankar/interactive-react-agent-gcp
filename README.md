@@ -1,30 +1,38 @@
-# Interactive ReAct Agent in GCP 🚀
+# Interactive ReAct Agent on Google Cloud 🚀
 
-An interactive ReAct agent implemented in Python, featuring a web-based chat interface built with Streamlit. The agent is containerized with Docker, deployed on Google Cloud Run, and communicates with the UI client over HTTP. This project supports visualizing the agent's thought process during interactions.
+An interactive ReAct agent built in Python, featuring a web-based chat interface developed with Streamlit. The agent is containerized using Docker, deployed on Google Cloud Run, and interacts with the UI client via HTTP. This project is designed to visualize the agent's thought process in real-time during interactions.
+
+---
 
 ## Features ✨
 
-- **ReAct Agent** 🤖: Utilizes Wikipedia and Google search tools to answer queries.
-- **Web UI** 🖥️: Streamlit-based chat interface for interacting with the agent.
-- **Trace Visualization** 🔍: Displays the agent's reasoning steps.
-- **Cloud Deployment** ☁️: Agent service containerized with Docker and deployed on Google Cloud Run.
-- **Decoupled Architecture** 🛠️: Separates the client UI from the agent service for scalability.
+- **ReAct Agent** 🤖: Uses Wikipedia and Google search tools to answer queries.
+- **Web-Based UI** 🖥️: Streamlit-powered chat interface for a smooth interactive experience.
+- **Trace Visualization** 🔍: Visualizes the agent's reasoning steps.
+- **Cloud-Native Deployment** ☁️: Containerized with Docker and deployed on Google Cloud Run.
+- **Modular Architecture** 🛠️: Decouples the client UI from the agent service for improved scalability.
 
-## Architecture 🏗️
+---
 
-The system consists of two main components:
+## System Architecture 🏗️
 
-1. **Agent Service** (`server/`): A Flask application running the ReAct agent, which is deployed on Google Cloud Run.
-2. **Client UI** (`client/`): A Streamlit application that serves as the chat interface, running locally on your machine.
+The project comprises two main components:
 
-They communicate over HTTP, allowing the agent to process queries and return responses along with the thought process.
+1. **Agent Service** (`server/`): A Flask application hosting the ReAct agent, deployed on Google Cloud Run.
+2. **Client UI** (`client/`): A Streamlit app serving as the chat interface, running locally on your machine.
+
+These components communicate via HTTP, enabling the agent to process queries and return responses alongside its thought process.
+
+---
 
 ## Getting Started ⚙️
 
 ### Prerequisites 📋
 
-- **Python** 3.8 or higher
-- **Docker** (for containerizing the agent service)
+Ensure you have the following installed:
+
+- **Python** 3.8 or later
+- **Docker** (for containerization)
 - **Google Cloud SDK** (for deployment)
 - **Streamlit** (for the client UI)
 - **Git** (for version control)
@@ -34,61 +42,69 @@ They communicate over HTTP, allowing the agent to process queries and return res
 1. **Clone the Repository** 📂
 
     ```bash
-    git clone https://github.com/arunpshankar/react-agent-chat-ui.git
-    cd react-agent-chat-ui
+    git clone https://github.com/arunpshankar/interactive-react-agent-gcp.git
+    cd interactive-react-agent-gcp
     ```
 
-2. **Create a Virtual Environment** 🐍
+2. **Set Up a Virtual Environment** 🐍
 
     ```bash
     python3 -m venv venv
     source venv/bin/activate   # On Windows use `venv\Scripts\activate`
     ```
 
-3. **Install All Requirements** 📦
+3. **Install Dependencies** 📦
 
     ```bash
-    pip install -r server/requirements.txt
-    pip install -r client/requirements.txt
+    pip install -r requirements.txt
     ```
 
-4. **Service Account Credentials** 🔑
+4. **Configure Environment Variables** 🔧
 
-   Ensure you have your Google Cloud service account credentials ready. Place the JSON credentials file in the project’s root directory and export it:
+   To maintain a clean environment and disable Python bytecode generation, set the following environment variables:
 
-    ```bash
-    export GOOGLE_APPLICATION_CREDENTIALS="path/to/your/credentials.json"
-    export PYTHONPATH=$PYTHONPATH:.
+   ```bash
+   export PYTHONDONTWRITEBYTECODE=1
+   export PYTHONPATH=$PYTHONPATH:.
+   ```
+
+5. **Service Account Credentials** 🔑
+
+    Place your Google Cloud service account JSON credentials file in the `server/credentials` folder. Also, include your SERP API access token in a YAML file (`key.yml`) in the same directory, structured as follows:
+
+    ```yaml
+    serp:
+        key: <your_token_here>
     ```
 
-## Running the Project Locally 🌍
+---
 
-### Agent Service
+## Running Locally 🌍
 
-1. **Run the Agent Service**
+### 1. Start the Agent Service
 
-    Navigate to the `server/` directory and start the agent service:
+   In the `server/` directory, start the agent service:
 
-    ```bash
-    cd server
-    python app.py
-    ```
+   ```bash
+   cd server
+   python app.py
+   ```
 
-   The agent service will start running at `http://0.0.0.0:8080`.
+   The agent service will be accessible at `http://0.0.0.0:8080`.
 
-### Client UI
+### 2. Launch the Client UI
 
-1. **Run the Streamlit Client UI**
+   From the `client/` directory, start the Streamlit app:
 
-    From the `client/` directory, start the Streamlit app:
+   ```bash
+   cd ../client
+   streamlit run app.py
+   ```
 
-    ```bash
-    cd ../client
-    streamlit run app.py
-    ```
+   This will open the UI in your default web browser at `http://localhost:8501`.
 
-   The Streamlit UI will open in your default web browser at `http://localhost:8501`.
+---
 
-## Deployment 🌐
+## Deployment on Google Cloud 🌐
 
-To deploy the ReAct agent to Google Cloud Run, refer to the deployment instructions in `./server/README.md`. This includes Dockerizing the service and configuring it to run on Google Cloud.
+To deploy the ReAct agent to Google Cloud Run, follow the instructions in `./server/README.md`, which cover Dockerizing the service and setting up the deployment on Google Cloud.
