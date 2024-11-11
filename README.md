@@ -105,11 +105,14 @@ To deploy the ReAct agent to Google Cloud Run, follow the instructions in `./ser
 
 Try these example queries to see the ReAct agent in action:
 
-1. **Query**: "Which tennis players won 3+ Grand Slams in the 1990s, and which American fast-food chain did they all appear in commercials for?"
-   
-   **Expected Answer**: Sampras, Agassi, Graf — Pizza Hut.
+1. **Query**: "Which teams won NBA Finals in 1990-1992, and what was the shared official team color?"
 
-2. **Query**: "Which baseball teams won back-to-back World Series in the 1990s, and what signature hot beverage did both cities claim to have invented?"
+   **Expected Answer**: Detroit Pistons and Chicago Bulls — Red.
 
-   **Expected Answer**: Toronto Blue Jays, Yankees — Irish Coffee (both cities had famous Irish pubs claiming to be the first).
+2. **Query**: "Which countries won the FIFA World Cup in 1990 and 1994, and name one celebrity common to both countries and how they are associated with Tom Brady."
 
+   **Expected Answer**: Argentina (1990) and Brazil (1994) — Gisele Bündchen, who is Brazilian and Tom Brady's ex-wife.
+
+3. **Query**: "Which two countries won the Cricket World Cups in the 1990s, and what association are both part of within which council?"
+
+   **Expected Answer**: Pakistan (1992) and Sri Lanka (1996) — Both are members of the ICC (International Cricket Council).
