@@ -1,7 +1,3 @@
-Thank you for pointing that out. Here’s the revised guide with the step for creating the credentials folder and adding the necessary keys.
-
----
-
 # Deploying a React Agent Service on Google Cloud Run
 
 This guide provides a comprehensive process to build and deploy a Python-based React Agent service using Docker on Google Cloud Run. The Docker image is created from a `requirements.txt` file, pushed to Google Artifact Registry, and deployed to Cloud Run.

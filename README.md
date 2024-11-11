@@ -1,57 +1,33 @@
 # Interactive ReAct Agent in GCP
-An interactive ReAct agent deployed on Google Cloud Run with a Streamlit UI client.
-
-**Repository Structure:**
-
-```
-react-agent-chat-ui/
-├── README.md
-├── agent_service/
-│   ├── Dockerfile
-│   ├── requirements.txt
-│   ├── agent_service.py
-│   └── src/
-│       ├── __init__.py
-│       ├── agent.py
-│       ├── tools/
-│       │   ├── __init__.py
-│       │   ├── serp.py
-│       │   └── wiki.py
-│       ├── llm/
-│       │   ├── __init__.py
-│       │   └── gemini.py
-│       ├── config/
-│       │   ├── __init__.py
-│       │   ├── logging.py
-│       │   └── setup.py
-│       └── utils/
-│           ├── __init__.py
-│           └── io.py
-├── client/
-│   ├── app.py
-│   └── requirements.txt
-└── LICENSE
-```
-
-# ReAct Agent Chat UI
 
 An interactive ReAct agent implemented in Python, featuring a web-based chat interface built with Streamlit. The agent is containerized with Docker, deployed on Google Cloud Run, and communicates with the UI client over HTTP. This project supports multi-turn conversations and visualizes the agent's thought process during interactions.
 
 ## Table of Contents
 
-- [Features](#features)
-- [Architecture](#architecture)
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Repository Structure](#repository-structure)
-- [Setup and Installation](#setup-and-installation)
-  - [Agent Service](#agent-service)
-  - [Client UI](#client-ui)
-- [Usage](#usage)
-- [Deployment](#deployment)
-  - [Deploying to Google Cloud Run](#deploying-to-google-cloud-run)
-- [Contributing](#contributing)
-- [License](#license)
+- [Interactive ReAct Agent in GCP](#interactive-react-agent-in-gcp)
+  - [Table of Contents](#table-of-contents)
+  - [Features](#features)
+  - [Architecture](#architecture)
+  - [Getting Started](#getting-started)
+    - [Prerequisites](#prerequisites)
+    - [Repository Structure](#repository-structure)
+  - [Setup and Installation](#setup-and-installation)
+    - [Agent Service](#agent-service)
+      - [1. Clone the Repository](#1-clone-the-repository)
+      - [2. Install Dependencies](#2-install-dependencies)
+      - [3. Run the Agent Service Locally](#3-run-the-agent-service-locally)
+    - [Client UI](#client-ui)
+      - [1. Navigate to the Client Directory](#1-navigate-to-the-client-directory)
+      - [2. Install Dependencies](#2-install-dependencies-1)
+      - [3. Run the Streamlit App](#3-run-the-streamlit-app)
+  - [Usage](#usage)
+  - [Deployment](#deployment)
+    - [Deploying to Google Cloud Run](#deploying-to-google-cloud-run)
+      - [1. Build and Push the Docker Image](#1-build-and-push-the-docker-image)
+      - [2. Deploy the Agent Service](#2-deploy-the-agent-service)
+      - [3. Update the Client UI](#3-update-the-client-ui)
+  - [Contributing](#contributing)
+  - [License](#license)
 
 ## Features
 
