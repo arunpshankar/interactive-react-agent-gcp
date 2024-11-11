@@ -3,12 +3,13 @@ import requests
 import logging
 import time
 
+
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 
 # Define the API URL of your agent service
-# AGENT_API_URL = 'https://react-agent-service-390991481152.us-central1.run.app/api/agent'
-AGENT_API_URL = 'http://localhost:8080/api/agent'
+AGENT_API_URL = 'https://react-agent-service-390991481152.us-central1.run.app/api/agent'
+# AGENT_API_URL = 'http://localhost:8080/api/agent'
 
 # Streamlit UI setup
 st.set_page_config(page_title="Agent Chat Interface", page_icon="💬", layout="wide")
@@ -100,6 +101,7 @@ def apply_custom_styles():
         </style>
     """, unsafe_allow_html=True)
 
+
 apply_custom_styles()
 
 # Initialize conversation history in session state
@@ -108,6 +110,7 @@ if 'conversation_history' not in st.session_state:
     st.session_state.latest_user_message = None
     st.session_state.latest_agent_response = None
     st.session_state.latest_trace = None
+
 
 # Function to send query to the agent API and retrieve the response
 def get_agent_response(user_message):
@@ -128,6 +131,7 @@ def get_agent_response(user_message):
 # Function to remove "Final Answer:" prefix from response
 def clean_final_answer(answer):
     return answer.replace("Final Answer: ", "")
+
 
 # Function to display the agent's thought process
 def display_trace(trace):
@@ -173,6 +177,7 @@ with st.sidebar:
         st.session_state.latest_agent_response = None
         st.session_state.latest_trace = None
         st.experimental_rerun()
+
 
 # Main content area
 st.markdown("<h1 style='text-align: center;'>💬 Talk to Agent</h1>", unsafe_allow_html=True)
