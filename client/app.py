@@ -176,7 +176,7 @@ with st.sidebar:
         st.session_state.latest_user_message = None
         st.session_state.latest_agent_response = None
         st.session_state.latest_trace = None
-        st.experimental_rerun()
+        st.rerun()
 
 
 # Main content area
