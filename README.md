@@ -2,6 +2,10 @@
 
 An interactive ReAct agent built in Python, featuring a web-based chat interface developed with Streamlit. The agent is containerized using Docker, deployed on Google Cloud Run, and interacts with the UI client via HTTP. This project is designed to visualize the agent's thought process in real-time during interactions.
 
+<p align="center">
+  <img width="100" src="./img/UI.png" alt="Client UI">
+</p>
+
 ## Features ✨
 
 - **ReAct Agent** 🤖: Uses Wikipedia and Google search tools to answer queries.
